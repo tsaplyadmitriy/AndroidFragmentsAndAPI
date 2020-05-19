@@ -2,7 +2,9 @@ package d.tsaplya.guidelead;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -38,13 +42,20 @@ public class FirstFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
         UserPreferences newUserPreferences = null;
         try {
-             newUserPreferences = APIRequests.getUserPreference(1L);
+             newUserPreferences = APIRequests.getUserPreference(4L);
+             ArrayList<UserPreferences>userPreferencesList = APIRequests.getAlluserPrefernces();
+            Log.d("list",userPreferencesList.toString());
+            ArrayList<Category>catList = new ArrayList<>();
+            catList.add(Category.ARCHITECTURE);
+            catList.add(Category.NATURE);
+            APIRequests.addUserPreference(new UserPreferences(catList,Duration.FOUR_HOUR));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
